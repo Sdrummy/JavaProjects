@@ -1,5 +1,6 @@
 package pong;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.Timer;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Field extends JPanel implements ActionListener, KeyListener{
@@ -15,13 +17,20 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 	private Player p1,p2;
 	private Puck p;
 	private Game match;
-	
 	public Field(Game match) {
 		setBackground(Color.BLACK);
 		this.match=match;
 		p=new Puck(match);
 		p1=new Player(match,4,87,83);
 		p2=new Player(match,680,38,40);
+		JPanel scorePanel=new JPanel(new BorderLayout());
+		JLabel scoreP1=p1.getScoreLabel();
+		JLabel scoreP2=p2.getScoreLabel();
+		scorePanel.add(scoreP1,BorderLayout.EAST);
+		scorePanel.add(scoreP2,BorderLayout.WEST);
+		
+		this.add(scorePanel);
+		
 		Timer timer=new Timer(10,this);
 		timer.start();
 		addKeyListener(this);
@@ -42,6 +51,30 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 		p.update();
 		p1.update();
 		p2.update();
+		if(p1.checkScore()) {
+			JOptionPane.showMessageDialog(this.getParent().getComponent(0), "Vince il giocatore di Destra!" );
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.exit(0);
+			
+		}
+		if(p2.checkScore()) {
+			JOptionPane.showMessageDialog(this.getParent().getComponent(0), "Vince il giocatore di Sinistra!");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.exit(0);
+			
+		}
+		
+		
 	}
 	
 	
@@ -79,7 +112,6 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		e.
 		update();
 		repaint();
 	}

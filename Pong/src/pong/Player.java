@@ -1,15 +1,17 @@
 package pong;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
+import javax.swing.JLabel;
 
 public class Player{
 	private static final int PH=60 ,PW=10 ;
 	private Game match;
 	private int y,yspeed,x,up,down;
 	private int score=0;
+	private JLabel scr;
 	public void setScore(int score) {
 		this.score = score;
 	}
@@ -20,6 +22,7 @@ public class Player{
 		this.x=x;
 		this.up=up;
 		this.down=down;
+		scr=new JLabel("Score: 0");
 		
 	}
 	
@@ -29,22 +32,29 @@ public class Player{
 
 	public void pointScored() {
 		score++;
+		scr.setText("Score: "+score);
+		
+	}
+	public boolean checkScore() {
+		if(score>=10)
+			return true;
+		else
+			return false;
 	}
 	public void update() {
-		if(y>0 && y<match.getHeight()-PH-29)
+		if(y>=0 && y<=match.getHeight()-PH-30)
 			y+=yspeed;
-		else if(y==0)
-			y+=3;
-		else if(y>=match.getHeight()-PH-29)
-			y-=3;
+		if(y<0 || y>match.getHeight()-PH-30 )
+			y-=yspeed;
+	
 		
 	}
 	
 	public void pressed(int keyCode) {
 		if(keyCode == up)
-			yspeed=-3;
+			yspeed=-4;
 		else if(keyCode==down)
-			yspeed=3;
+			yspeed=4;
 		
 	}
 	
@@ -52,16 +62,14 @@ public class Player{
 		if(keyCode==up || keyCode==down)
 			yspeed=0;
 	}
-	
+	public JLabel getScoreLabel() {
+		return scr;
+	}
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, PW, PH);
 	}
 	public void paint(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(x, y, PW, PH);
-		g.drawString(match.getF().getPlayer1().getScore().toString(), 670,20);
-		g.drawString(match.getF().getPlayer2().getScore().toString(), 15,20);
-		
-		
 	}
 }
