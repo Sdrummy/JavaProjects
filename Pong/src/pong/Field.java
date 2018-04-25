@@ -7,10 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.Timer;
-
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Field extends JPanel implements ActionListener, KeyListener{
+	private static final long serialVersionUID = 1L;
 	private Player p1,p2;
 	private Puck p;
 	private Game match;
@@ -19,8 +20,8 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 		setBackground(Color.BLACK);
 		this.match=match;
 		p=new Puck(match);
-		p1=new Player(match,5,38,40);
-		p2=new Player(match,670,87,83);
+		p1=new Player(match,4,87,83);
+		p2=new Player(match,680,38,40);
 		Timer timer=new Timer(10,this);
 		timer.start();
 		addKeyListener(this);
@@ -34,6 +35,7 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 		p1.paint(g);
 		p2.paint(g);
 		p.paint(g);
+		
 	}
 
 	public void update() {
@@ -77,6 +79,7 @@ public class Field extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		e.
 		update();
 		repaint();
 	}

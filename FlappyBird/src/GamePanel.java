@@ -59,7 +59,6 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			tubes.get(i).update();
 			if(tubes.get(i).outScreen())
 				tubes.remove(i);
-			System.out.println(tubes.size());
 		}
 		repaint();
 	}

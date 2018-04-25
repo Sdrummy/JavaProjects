@@ -1,9 +1,10 @@
 package pong;
-import java.awt.Color;
+
 
 import javax.swing.*;
 
 public class Game extends JFrame{
+	private static final long serialVersionUID = 1L;
 	private static final int WINDOW_HEIGHT=450,WINDOW_WIDTH=700;
 	private Field f;
 	
@@ -14,6 +15,7 @@ public class Game extends JFrame{
 		f=new Field(this);
 		add(f);
 		this.setVisible(true);
+		this.setResizable(false);
 	}
 	
 

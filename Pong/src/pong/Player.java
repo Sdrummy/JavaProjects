@@ -1,6 +1,7 @@
 package pong;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -8,7 +9,11 @@ public class Player{
 	private static final int PH=60 ,PW=10 ;
 	private Game match;
 	private int y,yspeed,x,up,down;
-	
+	private int score=0;
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	public Player(Game match,int x,int up,int down) {
 		this.match=match;
 		this.y=match.getHeight() / 2;
@@ -18,6 +23,13 @@ public class Player{
 		
 	}
 	
+	public Integer getScore() {
+		return score;
+	}
+
+	public void pointScored() {
+		score++;
+	}
 	public void update() {
 		if(y>0 && y<match.getHeight()-PH-29)
 			y+=yspeed;
@@ -47,5 +59,9 @@ public class Player{
 	public void paint(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(x, y, PW, PH);
+		g.drawString(match.getF().getPlayer1().getScore().toString(), 670,20);
+		g.drawString(match.getF().getPlayer2().getScore().toString(), 15,20);
+		
+		
 	}
 }
