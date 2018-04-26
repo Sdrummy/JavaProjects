@@ -42,9 +42,9 @@ public class Player{
 			return false;
 	}
 	public void update() {
-		if(y>=0 && y<=match.getHeight()-PH-30)
+		if(y>=0 && y<=match.getHeight()-PH-29)
 			y+=yspeed;
-		if(y<0 || y>match.getHeight()-PH-30 )
+		if(y<0 || y>match.getHeight()-PH-29 )
 			y-=yspeed;
 	
 		

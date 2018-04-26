@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
 import javax.swing.Timer;
-
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener,KeyListener {
@@ -14,15 +14,26 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	private static final long serialVersionUID = 1L;
 	private Game match;
 	private Bird flappy;
-	private ArrayList<Tube> tubes;
+	private Tube tube1,tube2;
+	private BufferedImage background;
 	
-	//private Tube tube;
+/*
+ * implementare un modo per bloccare il gioco quando il giocatore colpisce un pilone con una specie di menù che riporta il risultato ottenuto
+ * e la possibilità di scegliere se ritentare oppure uscire 
+ * 
+ */
 	public GamePanel(Game match) {
 		this.match=match;
 		flappy=new Bird(match);
 		Timer timer=new Timer(10,this);
-		//tube=new Tube(match);
-		tubes=new ArrayList<Tube>();
+		tube1=new Tube(match,match.getWidth());
+		tube2=new Tube(match,match.getWidth()+match.getWidth()/2);
+		try {
+			this.background=ImageIO.read(getClass().getResource("landscape.png"));
+		} catch (Exception e) {
+			
+		}
+		
 		this.setBackground(Color.BLACK);
 		this.addKeyListener(this);
 		this.setFocusable(true);
@@ -53,21 +64,22 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		flappy.update();
-		if(arg0.getWhen()%30==0)
-			tubes.add(new Tube(match));
-		for(int i=0;i<tubes.size();i++) {
-			tubes.get(i).update();
-			if(tubes.get(i).outScreen())
-				tubes.remove(i);
-		}
+		tube1.update();
+		tube2.update();
+
 		repaint();
 	}
-	
+	public Bird getBird() {
+		return this.flappy;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.drawImage(background,-800, -900, null);
 		flappy.paint(g);
-		for(int i=0;i<tubes.size();i++)
-			tubes.get(i).paint(g);
+		tube1.paint(g);
+		tube2.paint(g);
+
+
 	}
 
 }
