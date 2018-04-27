@@ -25,7 +25,7 @@ public class Tube {
 		this.match=match;
 		x=pos;
 
-		xspeed=4;
+		xspeed=5;
 		Random ran=new Random();
 		
 		top=ran.nextDouble()*(match.getHeight()/2);
@@ -59,7 +59,7 @@ public class Tube {
 			death.start(); 			
 			death.setFramePosition(0);
 			Object[] op= {"Riproviamo","Basta Così"};
-			JOptionPane pane=new JOptionPane("ops purtroppo sei morto :(((( che facciamo ora?",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane pane=new JOptionPane("Che facciamo?Ah complimentoni hai superato ben "+match.getGamePanel().getBird().getScore()+" piloni :)",JOptionPane.INFORMATION_MESSAGE);
 			
 			pane.setOptions(op);
 			JDialog dialog=pane.createDialog(match.getComponent(0), "Partita Conclusa");
@@ -83,7 +83,9 @@ public class Tube {
 			this.x=1.5*match.getWidth();
 		
 	}
-	
+	public double getX() {
+		return this.x;
+	}
 	public boolean checkCollision() {
 		if(match.getGamePanel().getBird().getBounds().intersects(getBottomBounds()) || match.getGamePanel().getBird().getBounds().intersects(getTopBounds()))
 			return true;

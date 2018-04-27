@@ -19,15 +19,15 @@ public class Bird {
 	private double grav,lift;
 	private BufferedImage img;
 	private Clip hoop,death;
-	
+	private int score;
 	public Bird(Game match) {
 		this.match=match;
 		y=match.getHeight()/2;
 		x=SIZE;
 		yspeed=0;
-		grav=0.1;
-		lift=7;
-		
+		grav=0.15;
+		lift=8;
+		score=0;
 		try {
 			img=ImageIO.read(getClass().getResource("cippy.png"));
 		} catch (Exception e) {
@@ -62,14 +62,16 @@ public class Bird {
 		yspeed+=grav;
 		yspeed*=0.98;
 		y+=yspeed;
-		if(y>match.getHeight()-2.25*SIZE) { // ho toccato terra quindi sono morto
+	  
+		if(y>match.getHeight()-2*SIZE) { // ho toccato terra quindi sono morto
 			match.getGamePanel().stopFunnyMusic();
 			death.start(); 	
 			death.setFramePosition(0);
+			System.out.println(score);
 			Object[] op= {"Riproviamo","Basta Così"};
-			JOptionPane pane=new JOptionPane("ops purtroppo sei morto :(((( che facciamo ora?",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane pane=new JOptionPane("Che facciamo?Ah complimentoni hai superato ben "+match.getGamePanel().getBird().getScore()+" piloni :)",JOptionPane.INFORMATION_MESSAGE);
 			pane.setOptions(op);
-			JDialog dialog=pane.createDialog(match.getComponent(0), "Partita Conclusa");
+			JDialog dialog=pane.createDialog(match.getComponent(0), "Ops Sei Morto :(");
 			dialog.setVisible(true);
 			if(pane.getValue()==null)
 				System.exit(0);
@@ -78,6 +80,8 @@ public class Bird {
 			if(pane.getValue().equals(op[0]))
 				match.getGamePanel().reset();
 			
+	
+	
 				
 		}
 		if(y<0) {
@@ -85,16 +89,20 @@ public class Bird {
 			yspeed=0;
 		}
 			
+		if(match.getGamePanel().getTube1().getX()==this.x || match.getGamePanel().getTube2().getX()==this.x)
+			score++;
+		
 	}
 	
 	public void reset() {
 		this.x=SIZE;
 		y=match.getHeight()/2;
 		yspeed=0;
+		score=0;
 	
 	}
-	public double getXPos() {
-		return this.x;
+	public int getScore() {
+		return score;
 	}
 	
 	public Rectangle getBounds() {

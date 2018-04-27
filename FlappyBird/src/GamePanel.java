@@ -23,14 +23,11 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	private Tube tube1,tube2;
 	private BufferedImage background;
 	private Clip theme;
-/*
- * implementare un sistema di punteggi
- * 
- */
+
 	public GamePanel(Game match) {
 		this.match=match;
 		flappy=new Bird(match);
-		Timer timer=new Timer(10,this);
+		Timer timer=new Timer(15,this);
 		tube1=new Tube(match,match.getWidth());
 		tube2=new Tube(match,match.getWidth()+match.getWidth()/2);
 		try {
@@ -96,6 +93,13 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		theme.stop();
 	}
 
+	public Tube getTube1() {
+		return tube1;
+	}
+	public Tube getTube2() {
+		return tube2;
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(background,-800, -900, null);
