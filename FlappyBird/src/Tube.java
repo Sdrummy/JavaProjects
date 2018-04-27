@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 
 public class Tube {
@@ -15,14 +17,15 @@ public class Tube {
 	private double x,xspeed;
 	private double top,bottom;
 	private Game match;
-	private static final int GAP=90;
+	private static final int GAP=80;
 	private BufferedImage imgBottom,imgTop;
 	private Clip death;
+
 	public Tube(Game match,double pos) {
 		this.match=match;
 		x=pos;
-		
-		xspeed=3;
+
+		xspeed=4;
 		Random ran=new Random();
 		
 		top=ran.nextDouble()*(match.getHeight()/2);
@@ -52,21 +55,34 @@ public class Tube {
 		}
 		
 		if(checkCollision()) {
-			//JOptionPane.showMessageDialog(match.getComponent(0), "ops è morto l'uccellino");
+			match.getGamePanel().stopFunnyMusic();
+			death.start(); 			
+			death.setFramePosition(0);
+			Object[] op= {"Riproviamo","Basta Così"};
+			JOptionPane pane=new JOptionPane("ops purtroppo sei morto :(((( che facciamo ora?",JOptionPane.INFORMATION_MESSAGE);
 			
-			death.start();
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-			
-			}
-			System.exit(0);
-			
-			
+			pane.setOptions(op);
+			JDialog dialog=pane.createDialog(match.getComponent(0), "Partita Conclusa");
+			dialog.setVisible(true);
+			if(pane.getValue()==null)
+				System.exit(0);
+			if(pane.getValue().equals(op[1]))
+				System.exit(0);
+			if(pane.getValue().equals(op[0]))
+				match.getGamePanel().reset();
+				
 		}
+		
 
 	}
-
+	
+	public void reset(boolean primo) {
+		if(primo)
+			this.x=match.getWidth();
+		else
+			this.x=1.5*match.getWidth();
+		
+	}
 	
 	public boolean checkCollision() {
 		if(match.getGamePanel().getBird().getBounds().intersects(getBottomBounds()) || match.getGamePanel().getBird().getBounds().intersects(getTopBounds()))
@@ -81,6 +97,7 @@ public class Tube {
 	public Rectangle getTopBounds() {
 		return (new Rectangle((int)x,0,W,(int)top));
 	}
+	
 	public void paint(Graphics g) {
 		g.drawImage(imgTop, (int)x, 0 , W, (int)top, null);
 		g.drawImage(imgBottom, (int)x, match.getHeight()-(int)bottom, W, (int)bottom,null);

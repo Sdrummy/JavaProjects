@@ -5,8 +5,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+
 import javax.swing.Timer;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener,KeyListener {
@@ -16,10 +22,9 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	private Bird flappy;
 	private Tube tube1,tube2;
 	private BufferedImage background;
-	
+	private Clip theme;
 /*
- * implementare un modo per bloccare il gioco quando il giocatore colpisce un pilone con una specie di menù che riporta il risultato ottenuto
- * e la possibilità di scegliere se ritentare oppure uscire 
+ * implementare un sistema di punteggi
  * 
  */
 	public GamePanel(Game match) {
@@ -30,6 +35,9 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		tube2=new Tube(match,match.getWidth()+match.getWidth()/2);
 		try {
 			this.background=ImageIO.read(getClass().getResource("landscape.png"));
+			AudioInputStream instream=AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("8bitmusic.wav")));
+			theme=AudioSystem.getClip();
+			theme.open(instream);
 		} catch (Exception e) {
 			
 		}
@@ -61,24 +69,40 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		
 	}
 
+	public void reset() {
+		flappy.reset();
+		tube1.reset(true);
+		tube2.reset(false);
+		theme.setFramePosition(0);
+		repaint();
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			
+		}
+	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		flappy.update();
 		tube1.update();
 		tube2.update();
-
+		theme.loop(Clip.LOOP_CONTINUOUSLY);
 		repaint();
 	}
 	public Bird getBird() {
 		return this.flappy;
 	}
+	public void stopFunnyMusic() {
+		theme.stop();
+	}
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(background,-800, -900, null);
 		flappy.paint(g);
 		tube1.paint(g);
 		tube2.paint(g);
-
+	
 
 	}
 

@@ -7,16 +7,19 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 
 public class Bird {
-	private static final int SIZE=20;
+	private static final int SIZE=25;
 	private Game match;
 	private double y,yspeed;
 	private double x;
 	private double grav,lift;
 	private BufferedImage img;
 	private Clip hoop,death;
+	
 	public Bird(Game match) {
 		this.match=match;
 		y=match.getHeight()/2;
@@ -24,6 +27,7 @@ public class Bird {
 		yspeed=0;
 		grav=0.1;
 		lift=7;
+		
 		try {
 			img=ImageIO.read(getClass().getResource("cippy.png"));
 		} catch (Exception e) {
@@ -59,18 +63,22 @@ public class Bird {
 		yspeed*=0.98;
 		y+=yspeed;
 		if(y>match.getHeight()-2.25*SIZE) { // ho toccato terra quindi sono morto
-			death.start(); 			//prima bisogna settare il menù di partita terminata
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
+			match.getGamePanel().stopFunnyMusic();
+			death.start(); 	
+			death.setFramePosition(0);
+			Object[] op= {"Riproviamo","Basta Così"};
+			JOptionPane pane=new JOptionPane("ops purtroppo sei morto :(((( che facciamo ora?",JOptionPane.INFORMATION_MESSAGE);
+			pane.setOptions(op);
+			JDialog dialog=pane.createDialog(match.getComponent(0), "Partita Conclusa");
+			dialog.setVisible(true);
+			if(pane.getValue()==null)
+				System.exit(0);
+			if(pane.getValue().equals(op[1]))
+				System.exit(0);
+			if(pane.getValue().equals(op[0]))
+				match.getGamePanel().reset();
+			
 				
-			}
-			System.exit(0);
-			
-			
-			//JOptionPane.showMessageDialog(match.getComponent(0), "ops è morto l'uccellino");
-			/*y=match.getHeight()-2.5*SIZE;
-			yspeed=0;*/
 		}
 		if(y<0) {
 			y=0;
@@ -79,6 +87,12 @@ public class Bird {
 			
 	}
 	
+	public void reset() {
+		this.x=SIZE;
+		y=match.getHeight()/2;
+		yspeed=0;
+	
+	}
 	public double getXPos() {
 		return this.x;
 	}
