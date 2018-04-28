@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -24,10 +25,8 @@ public class Bird {
 		this.match=match;
 		y=match.getHeight()/2;
 		x=SIZE;
-		yspeed=0;
 		grav=0.15;
 		lift=8;
-		score=0;
 		try {
 			img=ImageIO.read(getClass().getResource("cippy.png"));
 		} catch (Exception e) {
@@ -40,6 +39,10 @@ public class Bird {
 			hoop.open(instream);
 			death=AudioSystem.getClip();
 			death.open(ins);
+			FloatControl gainControl=(FloatControl)hoop.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-10.0f);
+			FloatControl gainControl2=(FloatControl)death.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl2.setValue(-15.0f);
 		} catch (Exception e) {
 		} 
 		
@@ -67,7 +70,6 @@ public class Bird {
 			match.getGamePanel().stopFunnyMusic();
 			death.start(); 	
 			death.setFramePosition(0);
-			System.out.println(score);
 			Object[] op= {"Riproviamo","Basta Così"};
 			JOptionPane pane=new JOptionPane("Che facciamo?Ah complimentoni hai superato ben "+match.getGamePanel().getBird().getScore()+" piloni :)",JOptionPane.INFORMATION_MESSAGE);
 			pane.setOptions(op);

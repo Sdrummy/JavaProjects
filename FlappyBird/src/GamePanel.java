@@ -13,11 +13,13 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener,KeyListener {
 
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private Game match;
 	private Bird flappy;
 	private Tube tube1,tube2;
@@ -35,6 +37,8 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			AudioInputStream instream=AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("8bitmusic.wav")));
 			theme=AudioSystem.getClip();
 			theme.open(instream);
+			FloatControl gainControl=(FloatControl)theme.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-15.0f); //riduciamo di 15 decibel il volume della musica di sottofondo
 		} catch (Exception e) {
 			
 		}

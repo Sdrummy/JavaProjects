@@ -2,6 +2,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 public class Game extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private static final int WIDTH=600,HEIGHT=450;
 	GamePanel gamePanel;
 	

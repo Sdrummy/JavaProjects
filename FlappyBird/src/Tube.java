@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -36,6 +37,8 @@ public class Tube {
 			AudioInputStream ins=AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("morte.wav")));
 			death=AudioSystem.getClip();
 			death.open(ins);
+			FloatControl gainControl=(FloatControl)death.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-15.0f);
 		} catch (Exception e) {
 
 		}
